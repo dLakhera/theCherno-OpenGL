@@ -6,6 +6,28 @@
 
 using namespace std;
 
+// #define ASSERT(x) if(!(x)) __debugbreak();
+#define GLCall(x)   \
+    GLClearError(); \
+    x;              \
+    assert(GLLogCall(#x, __FILE__, __LINE__))
+
+static void GLClearError()
+{
+    while (glGetError() != GL_NO_ERROR)
+        ;
+}
+
+static bool GLLogCall(const char *function, const char *file, int line)
+{
+    while (GLenum error = glGetError())
+    {
+        cout << "[OpenGL Error] (" << error << ") " << function << " " << file << " " << line << endl;
+        return false;
+    }
+    return true;
+}
+
 struct ShaderProgramSource
 {
     string VertexSource;
@@ -115,7 +137,8 @@ int main(void)
         -0.5f, -0.5f,
         0.5f, -0.5f,
         0.5f, 0.5f,
-        -0.5f, 0.5f};
+        -0.5f, 0.5f
+    };
 
     unsigned int indices[] = {
         0, 1, 2,
@@ -149,8 +172,10 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        // glDrawArray()
+        // GLClearError();
+        GLCall(glDrawElements(GL_TRIANGLES, 6,GL_UNSIGNED_INT, nullptr));
+        // assert(GLLogCall());
+        // glDrawArray() 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
