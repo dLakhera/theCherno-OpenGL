@@ -8,8 +8,11 @@
 
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
-// g++ -std=c++11 *.cpp -lGLEW -lGLU -lGL -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl
+// cd src
+// g++ -std=c++11 *.cpp -lGLEW -lGLU -lGL -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -w
+// ./a.out
 
 using namespace std;
 
@@ -117,29 +120,27 @@ int main(void)
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
-    cout << glGetString(GL_VERSION) << endl;
+    // cout << glGetString(GL_VERSION) << endl;
     glewInit();
 
     float position[] = {
         -0.5f, -0.5f,
         0.5f, -0.5f,
         0.5f, 0.5f,
-        -0.5f, 0.5f};
+        -0.5f, 0.5f
+    };
 
     unsigned int indices[] = {
         0, 1, 2,
-        2, 3, 0};
+        2, 3, 0
+    };
 
-    unsigned int vao;
-    GLCall(glGenVertexArrays(1, &vao));
-    GLCall(glBindVertexArray(vao));
-
-
+    VertexArray va;
     VertexBuffer vb(position, 4 * 2 * sizeof(float));
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0);
-
+    VertexBufferLayout layout;
+    layout.Push<float>(2);
+    va.AddBuffer(vb,layout);
 
     IndexBuffer ib(indices,6);
 
@@ -173,13 +174,11 @@ int main(void)
         GLCall(glUseProgram(shader)); 
         GLCall(glUniform4f(location, r, 0.0f, 1.0f, 1.0f));
 
-        GLCall(glBindVertexArray(vao));
+        va.Bind();
         ib.Bind();
 
-        // GLClearError();
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-        // assert(GLLogCall());
-        // glDrawArray()
+
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
