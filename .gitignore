@@ -2,3 +2,4 @@ src/out
 src/a.out
 *.out
 .vscode
+src/vendor/glm

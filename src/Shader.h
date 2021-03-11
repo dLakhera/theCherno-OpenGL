@@ -1,6 +1,7 @@
 #pragma once
 #include<string>
 #include<unordered_map>
+#include "vendor/glm/glm.hpp"
 using namespace std;
 
 class Shader {
@@ -20,4 +21,5 @@ class Shader {
         void SetUniform1f(const std::string &name, float value);
         void SetUniform1i(const std::string &name, int value);
         void SetUniform4f(const std::string &name, float v0, float v1, float f1, float f3);
+        void SetUniformMat4f(const std::string &name, glm::mat4 matrix);
 };

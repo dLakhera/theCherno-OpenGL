@@ -12,6 +12,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "vendor/glm/glm.hpp"
+#include "vendor/glm/gtc/matrix_transform.hpp"
+
 // cd src
 // g++ -std=c++17 -I ./vendor/stb_image/ ./vendor/stb_image/*.cpp *.cpp -lGLEW -lGLU -lGL -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -w
 // ./a.out
@@ -64,9 +67,12 @@ int main(void)
 
     IndexBuffer ib(indices, 6);
 
+    glm::mat4 proj = glm::ortho(-2.0f,2.0f,-1.5f,1.5f,-1.0f,1.0f);
+
     Shader shader("../res/shader/basic.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color", 1.0f, 0.0f, 1.0f, 1.0f);
+    shader.SetUniformMat4f("u_MVP", proj);
 
     Texture texture("../res/textures/ladyonfire.png");
     texture.Bind();
