@@ -10,6 +10,7 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 // cd src
 // g++ -std=c++11 *.cpp -lGLEW -lGLU -lGL -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -w
@@ -40,19 +41,21 @@ int main(void)
     glewInit();
 
     float position[] = {
-        -0.5f, -0.5f,
-        0.5f, -0.5f,
-        0.5f, 0.5f,
-        -0.5f, 0.5f};
+        -0.5f, -0.5f, 0.0f, 0.0f,
+        0.5f, -0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0.0f, 1.0f
+    };
 
     unsigned int indices[] = {
         0, 1, 2,
         2, 3, 0};
 
     VertexArray va;
-    VertexBuffer vb(position, 4 * 2 * sizeof(float));
+    VertexBuffer vb(position, 4 * 4 * sizeof(float));
 
     VertexBufferLayout layout;
+    layout.Push<float>(2);
     layout.Push<float>(2);
     va.AddBuffer(vb, layout);
 
@@ -61,6 +64,11 @@ int main(void)
     Shader shader("../res/shader/basic.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color", 1.0f, 0.0f, 1.0f, 1.0f);
+
+    Texture texture("../res/textures/ladyonfire.png");
+    texture.Bind();
+
+    shader.SetUniform1i("u_Texture",0);
 
     va.Unbind();
     shader.Unbind();
