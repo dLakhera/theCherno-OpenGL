@@ -13,7 +13,7 @@
 #include "Texture.h"
 
 // cd src
-// g++ -std=c++11 *.cpp -lGLEW -lGLU -lGL -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -w
+// g++ -std=c++17 -I ./vendor/stb_image/ ./vendor/stb_image/*.cpp *.cpp -lGLEW -lGLU -lGL -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -w
 // ./a.out
 
 using namespace std;
@@ -50,6 +50,9 @@ int main(void)
     unsigned int indices[] = {
         0, 1, 2,
         2, 3, 0};
+
+    GLCall(glEnable(GL_BLEND));
+    GLCall(glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA));
 
     VertexArray va;
     VertexBuffer vb(position, 4 * 4 * sizeof(float));
