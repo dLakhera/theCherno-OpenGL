@@ -1,5 +1,5 @@
-src/out
-src/a.out
+src/*.out
 *.out
+a.out
 .vscode
-src/vendor/glm
+src/vendor/*
